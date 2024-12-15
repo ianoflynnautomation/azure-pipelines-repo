@@ -1,0 +1,22 @@
+parameters:
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: azureSubscription
+  type: string
+  default: ''
+
+steps:
+- script: |
+    terraform fmt --check --diff
+  displayName: 'Verify formatting'
+  workingDirectory: ${{ parameters.terraformWorkingDirectory }}
+
+- task: TerraformTaskV4@4
+  name: terraformValidate
+  displayName: 'Terraform Validate'
+  inputs:
+    provider: 'azurerm'
+    command: 'validate'
+    environmentServiceNameAzureRM: '${{ parameters.azureSubscription }}'
+    workingDirectory: ${{ parameters.terraformWorkingDirectory }}
