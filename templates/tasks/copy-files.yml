@@ -1,0 +1,19 @@
+parameters:
+- name: sourceFolder
+  type: string
+  default: ''
+- name: contents
+  type: string
+  default: ''
+- name: targetFolder
+  type: string
+  default: ''
+
+steps:
+- task: CopyFiles@2
+  displayName: 'Copy Files'
+  inputs:
+    SourceFolder: ${{ parameters.sourceFolder }}
+    Contents: ${{ parameters.contents }}
+    TargetFolder: ${{ parameters.targetFolder }}
+    OverWrite: true

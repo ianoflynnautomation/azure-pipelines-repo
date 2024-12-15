@@ -1,0 +1,9 @@
+parameters:
+- name: buildName
+  type: string
+  default: ''
+
+steps:
+- pwsh: |
+    Write-Host '##vso[build.updatebuildnumber]${{ parameters.buildName }}'
+  displayName: 'Set Build Number'

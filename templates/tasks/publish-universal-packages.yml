@@ -1,0 +1,23 @@
+parameters:
+- name: artifactFeedName
+  type: string
+  default: ''
+- name: projectName
+  type: string
+  default: ''
+- name: services
+  type: object
+  default: []
+
+steps:
+- ${{ each svc in parameters.services }}:
+  - task: UniversalPackages@0
+    displayName: Publish ${{ svc.serviceName }} Universal Package
+    inputs:
+      command: publish
+      publishDirectory: '$(System.DefaultWorkingDirectory)/${{ svc.artifactName }}'
+      vstsFeedPublish: '${{ parameters.projectName }}/${{ parameters.artifactFeedName }}'
+      vstsFeedPackagePublish: '${{ svc.packageName }}'
+      packagePublishDescription: '${{ svc.description }}'
+      versionOption: custom
+      versionPublish: '${{ svc.version }}'

@@ -1,0 +1,15 @@
+parameters:
+  - name: azureSubscription
+    type: string
+    default: ''
+
+steps:
+- task: AzureCLI@2
+  displayName: 'Login to Azure'
+  inputs:
+    azureSubscription: ${{ parameters.azureSubscription }}
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      # echo "Logging into Azure..."
+      # az account show

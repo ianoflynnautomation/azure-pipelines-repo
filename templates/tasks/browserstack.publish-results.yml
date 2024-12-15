@@ -1,0 +1,5 @@
+steps:
+- task: BrowserStackResults@0
+  displayName: 'Publish BrowserStack Results'
+  inputs:
+    browserstackProduct: 'automate'

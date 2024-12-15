@@ -1,0 +1,14 @@
+parameters:
+- name: sourceFilesPattern
+  type: string
+  default: ''
+- name: sourcePath
+  type: string
+  default: ''
+
+steps:
+- task: Tokenizer@0
+  displayName: 'Tokenize settings'
+  inputs:
+    sourceFilesPattern: ${{ parameters.sourceFilesPattern }}
+    sourcePath: ${{ parameters.sourcePath }}

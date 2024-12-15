@@ -1,0 +1,6 @@
+steps:
+- task: VisualStudioTestPlatformInstaller@1
+  displayName: 'Install Visual Studio Test Platform'
+  inputs:
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestStable'

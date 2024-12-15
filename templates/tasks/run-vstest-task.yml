@@ -1,0 +1,40 @@
+parameters:
+- name: testsPattern
+  type: string
+  default: ''
+- name: searchFolder
+  type: string
+  default: ''
+- name: testFilterCriteria
+  type: string
+  default: ''
+- name: runSettingsFile
+  type: string
+  default: ''
+- name: uiTests
+  type: boolean
+  default: false
+
+steps:
+
+- task: VSTest@3
+  inputs:
+    testSelector: 'testAssemblies'
+    testAssemblyVer2: |
+      ${{ parameters.testsPattern }}
+      !**\*TestAdapter.dll
+      !**\obj\**
+    searchFolder: ${{ parameters.searchFolder }}
+    resultsFolder: '$(Agent.TempDirectory)/TestResults'
+    testFiltercriteria: ${{ parameters.testFilterCriteria }}
+    uiTests: ${{ parameters.uiTests }}
+    codeCoverageEnabled: true
+    runSettingsFile: ${{ parameters.runSettingsFile }}
+    rerunFailedTests: true
+    rerunMaxAttempts: 1
+    rerunType: 'basedOnTestFailurePercentage'
+    rerunFailedThreshold: '30'
+    # distributionBatchType, batchingBasedOnAgentsOption, customBatchSizeValue -> make possible to rerun every test even forbidden characters
+    distributionBatchType: 'basedOnTestCases'
+    batchingBasedOnAgentsOption: 'customBatchSize'
+    customBatchSizeValue: '10000'

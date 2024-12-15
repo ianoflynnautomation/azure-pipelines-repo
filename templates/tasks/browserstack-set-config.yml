@@ -1,0 +1,10 @@
+parameters:
+- name: serviceConnection
+  type: string
+  default: ''
+
+steps:
+- task: BrowserStackConfig@0
+  displayName: 'Set BrowserStack Config'
+  inputs:
+    BrowserStackServiceEndPoint: ${{ parameters.serviceConnection }}

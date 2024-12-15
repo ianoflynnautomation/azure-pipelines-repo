@@ -1,0 +1,22 @@
+parameters:
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: azureSubscription
+  type: string
+  default: ''
+
+steps:
+- task: TerraformTaskV4@4
+  name: terraformInit
+  displayName: 'Terraform Init'
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: ${{ parameters.azureSubscription }}
+    commandOptions: '-input=false -backend=false'
+    backendAzureRmResourceGroupName: 'N/A'
+    backendAzureRmStorageAccountName: 'N/A'
+    backendAzureRmContainerName: 'N/A'
+    backendAzureRmKey: 'N/A'
+    workingDirectory: ${{ parameters.terraformWorkingDirectory }}

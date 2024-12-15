@@ -1,0 +1,51 @@
+parameters:
+- name: solution
+  type: string
+  default: ''
+- name: nugetPackages
+  type: string
+  default: ''
+- name: vstsFeed
+  type: string
+  default: ''
+- name: includeNuGetOrg
+  type: boolean
+  default: true
+
+steps:
+- task: NuGetToolInstaller@1
+  displayName: 'NuGet tool installer'
+
+- task: NuGetAuthenticate@1
+  displayName: 'Authenticate to NuGet'
+  inputs: 
+    forceReinstallCredentialProvider: true
+
+- task: Cache@2
+  displayName: Cache NuGet packages
+  inputs:
+    key: 'nuget | "$(Agent.OS)" | **/*.csproj,!**/bin/**,!**/obj/**'
+    restoreKeys: |
+       nuget | "$(Agent.OS)"
+       nuget
+    path: ${{ parameters.nugetPackages }}
+    cacheHitVar: 'CACHE_RESTORED'
+
+# - task: NuGetCommand@2
+#   displayName: ${{ parameters.displayName }}
+#   # condition: ne(variables.CACHE_RESTORED, true)
+#   inputs:
+#     command: 'restore'
+#     restoreSolution: ${{ parameters.solution }}
+#     feedsToUse: 'select'
+#     vstsFeed: ${{ parameters.vstsFeed }}
+#     includeNuGetOrg: ${{ parameters.includeNuGetOrg }}
+
+- task: DotNetCoreCLI@2
+  displayName: 'Restore NuGet Packages'
+  inputs:
+    command: restore
+    projects: ${{ parameters.solution }}
+    feedsToUse: 'select'
+    vstsFeed: ${{ parameters.vstsFeed }}
+    includeNuGetOrg: ${{ parameters.includeNuGetOrg }}

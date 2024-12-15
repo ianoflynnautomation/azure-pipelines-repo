@@ -1,0 +1,11 @@
+parameters:
+- name: tfVars
+  type: string
+  default: ''
+
+steps:
+- task: DownloadSecureFile@1
+  name: terraformvars
+  displayName: 'Download Terraform Variables'
+  inputs:
+    secureFile: "${{ parameters.tfVars }}.tfvars"

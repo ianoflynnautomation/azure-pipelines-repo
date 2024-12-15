@@ -1,0 +1,31 @@
+parameters:
+- name: services
+  type: object
+  default: []
+
+steps:
+- ${{ each svc in parameters.services }}:
+  - task: DotNetCoreCLI@2
+    displayName: 'Publish ${{ svc.serviceName }}'
+    inputs:
+      command: publish
+      projects: |
+        **/${{ svc.projectName }}/${{ svc.projectName }}.csproj
+      publishWebProjects: false
+      zipAfterPublish: false
+      arguments: '--configuration $(buildConfiguration) -o $(Build.ArtifactStagingDirectory)/${{ svc.serviceName }}'
+
+  - ${{ if svc.dockerFile }}:
+    - task: CopyFiles@2
+      displayName: 'Copy Dockerfile for ${{ svc.dockerFile }}'
+      inputs: 
+        contents: '${{ svc.dockerFile }}'
+        targetFolder: '$(Build.ArtifactStagingDirectory)/${{ svc.serviceName }}'
+
+  - template: ../tasks/publish-pipeline-artifact.yml
+    parameters:
+      targetPath: '$(Build.ArtifactStagingDirectory)/${{ svc.serviceName }}'
+      artifact: 'publish_${{ svc.artifactName }}'
+
+
+    

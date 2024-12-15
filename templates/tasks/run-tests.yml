@@ -1,0 +1,36 @@
+parameters:
+- name: projectsPattern
+  type: string
+  default: ''
+- name: artifactName
+  type: string
+  default: ''
+- name: testsPattern
+  type: string
+  default: ''
+- name: testFilterCriteria
+  type: string
+  default: ''
+- name : runSettingsFile
+  type: string
+  default: ''
+- name: uiTests
+  type: boolean
+  default: false
+
+steps:
+- checkout: none
+
+- template: ../tasks/download-pipeline-artifact.yml
+  parameters:
+    artifactName: ${{ parameters.artifactName }}
+    itemPattern: ${{ parameters.projectsPattern }}
+    targetPath: '$(System.DefaultWorkingDirectory)/output'
+
+- template: ../tasks/run-vstest-task.yml
+  parameters:
+    testsPattern: ${{ parameters.testsPattern }}
+    testFilterCriteria: ${{ parameters.testFilterCriteria }}
+    searchFolder: '$(System.DefaultWorkingDirectory)/output'
+    runSettingsFile: ${{ parameters.runSettingsFile }}
+    uiTests: ${{ parameters.uiTests }}

@@ -1,0 +1,38 @@
+parameters:
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: azureSubscription
+  type: string
+  default: ''
+
+steps:
+# - task: TerraformTaskV4@4
+#   name: terraformPlan
+#   displayName: 'Terraform Plan'
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'plan'
+#     commandOptions: '-out=terraform.tfplan -destroy'
+#     environmentServiceNameAzureRM: '${{ parameters.azureSubscription }}'
+#     workingDirectory: ${{ parameters.terraformWorkingDirectory }}
+
+# - task: TerraformTaskV4@4
+#   name: terraformDestroy
+#   displayName: 'Terraform Destroy'
+#   inputs:
+#     provider: 'azurerm'
+#     command: 'apply'
+#     commandOptions: '-destroy -auto-approve terraform.tfplan'
+#     environmentServiceNameAzureRM: '${{ parameters.azureSubscription }}'
+#     workingDirectory: ${{ parameters.terraformWorkingDirectory }}
+
+- task: TerraformTaskV4@4
+  name: terraformDestroy
+  displayName: 'Terraform Destroy'
+  inputs:
+    provider: 'azurerm'
+    command: 'destroy'
+    commandOptions: '-auto-approve'
+    environmentServiceNameAzureRM: '${{ parameters.azureSubscription }}'
+    workingDirectory: ${{ parameters.terraformWorkingDirectory }}

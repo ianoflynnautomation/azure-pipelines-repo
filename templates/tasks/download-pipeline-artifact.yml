@@ -1,0 +1,19 @@
+parameters:
+- name: artifactName
+  type: string
+  default: ''
+- name: itemPattern
+  type: string
+  default: '**'
+- name: targetPath
+  type: string
+  default: '$(Pipeline.Workspace)'
+
+steps:
+  - task: DownloadPipelineArtifact@2
+    displayName: Download ${{ parameters.artifactName }} Pipeline Artifact
+    inputs:
+      buildType: 'current'
+      artifactName: '${{ parameters.artifactName }}'
+      itemPattern: '${{ parameters.itemPattern }}'
+      targetPath: '${{ parameters.targetPath }}'

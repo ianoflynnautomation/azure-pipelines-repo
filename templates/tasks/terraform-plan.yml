@@ -1,0 +1,29 @@
+parameters:
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: azureSubscription
+  type: string
+  default: ''
+- name: terraformState
+  type: string
+  default: ''
+- name: terraformPlan
+  type: string
+  default: ''
+
+steps:
+- task: TerraformTaskV4@4
+  name: terraformPlan
+  displayName: 'Terraform Plan'
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
+    commandOptions: '-out=terraform.tfplan'
+    environmentServiceNameAzureRM: '${{ parameters.azureSubscription }}'
+    workingDirectory: '${{ parameters.terraformWorkingDirectory }}'
+
+- template: ../tasks/publish-pipeline-artifact.yml
+  parameters:
+    targetPath: '${{ parameters.terraformWorkingDirectory }}/${{ parameters.terraformPlan }}.tfplan'
+    artifactName: '${{ parameters.terraformState }}'

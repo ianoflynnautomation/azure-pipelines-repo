@@ -1,0 +1,14 @@
+parameters:
+- name: services
+  type: object
+  default: []
+  
+steps:
+- ${{ each svc in parameters.services }}:
+  - task: DownloadPipelineArtifact@2
+    displayName: 'Download ${{ svc.artifactName }} Pipeline Artifact'
+    inputs:
+      buildType: 'current'
+      artifactName: '${{ svc.artifactName }}'
+      itemPattern: '${{ svc.itemPattern }}'
+      targetPath: '$(System.DefaultWorkingDirectory)/${{ svc.artifactName }}'

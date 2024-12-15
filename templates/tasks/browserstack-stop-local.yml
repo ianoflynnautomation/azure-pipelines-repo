@@ -1,0 +1,3 @@
+steps:
+- task: BrowserStackStopLocal@0
+  displayName: 'Stop BrowserStack Local'

@@ -1,0 +1,30 @@
+parameters:
+  - name: terraformWorkingDirectory
+    type: string
+  - name: commandOptionArgs
+    type: string
+    default: ''
+  - name: runMsDefender
+    type: boolean
+    default: true
+  - name: runTfSec
+    type: boolean
+    default: false
+  - name: securityTools
+    type: string
+    default: ''
+
+steps:
+- task: MicrosoftSecurityDevOps@1
+  condition: and(succeeded(), ne('${{ parameters.runMsDefender }}', false))
+  displayName: 'Run Defender for AzureDevOps'
+  inputs:
+    tools: '${{ parameters.securityTools }}' 
+    workingDirectory: ${{ parameters.terraformWorkingDirectory }}
+
+- task: tfsec@1
+  condition: and(succeeded(), ne('${{ parameters.runTfSec }}', false))
+  displayName: 'Run tfsec'
+  inputs:
+    dir: ${{ parameters.terraformWorkingDirectory }}
+    args: ${{ parameters.commandOptionArgs }}
