@@ -1,0 +1,32 @@
+parameters:
+  - name: 'pathtoPublish'
+    type: string
+    default: ''
+  - namw: 'condition'
+    type: string
+    default: ''
+
+steps:
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Playwright traces'
+  inputs:
+    PathtoPublish: '${{ parameters.pathtoPublish }}/playwright-traces'
+    ArtifactName: 'playwright-traces'
+    publishLocation: 'Container'
+  condition: ${{ parameters.condition }}
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Playwright screenshots'
+  inputs:
+    PathtoPublish: '${{ parameters.pathtoPublish }}/playwright-screenshot'
+    ArtifactName: 'playwright-screenshot'
+    publishLocation: 'Container'
+  condition: ${{ parameters.condition }}
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Playwright videos'
+  inputs:
+    PathtoPublish: '${{ parameters.pathtoPublish }}/playwright-videos'
+    ArtifactName: 'playwright-videos'
+    publishLocation: 'Container'
+  condition: ${{ parameters.condition }}
