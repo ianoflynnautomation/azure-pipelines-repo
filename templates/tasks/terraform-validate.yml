@@ -5,12 +5,15 @@ parameters:
 - name: azureSubscription
   type: string
   default: ''
+- name: fmtOptions
+  type: string
+  default: '--check --diff'
 
 steps:
-- script: |
-    terraform fmt --check --diff
-  displayName: 'Verify formatting'
-  workingDirectory: ${{ parameters.terraformWorkingDirectory }}
+- template: ../tasks/terraform-format.yml
+  parameters:
+    terraformWorkingDirectory: ${{ parameters.terraformWorkingDirectory }}
+    fmtOptions: ${{ parameters.fmtOptions }}
 
 - task: TerraformTaskV4@4
   name: terraformValidate

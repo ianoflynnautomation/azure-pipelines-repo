@@ -1,12 +1,40 @@
 parameters:
-- name: terraformWorkingDirectory
-  type: string
-  default: ''
 - name: azureSubscription
   type: string
   default: ''
+- name: commandOptions
+  type: string
+  default: ''
+- name: backendAzureRmResourceGroupName
+  type: string
+  default: ''
+- name: backendAzureRmStorageAccountName
+  type: string
+  default: ''
+- name: backendAzureRmContainerName
+  type: string
+  default: ''
+- name: backendAzureRmKey
+  type: string
+  default: ''
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: InstallSSH
+  type: boolean
+  default: false
 
 steps:
+
+- task: InstallSSHKey@0
+  displayName: 'Install the SSH key info used to clone terraform modules'
+  condition: and(succeeded(), and(ne('$(installSSh)', false), ${{ parameters.installSSH }}))
+  inputs:
+    knownHostsEntry: '$(knownHostsEntry)'
+    sshPublicKey: '$(sshPublicKey)'
+    sshPassphrase: '$(sshPassphrase)'
+    sshKeySecureFile: '$(sshKeySecureFile)'
+
 - task: TerraformTaskV4@4
   name: terraformInit
   displayName: 'Terraform Init'
@@ -14,9 +42,9 @@ steps:
     provider: 'azurerm'
     command: 'init'
     backendServiceArm: ${{ parameters.azureSubscription }}
-    commandOptions: '-input=false -backend=false'
-    backendAzureRmResourceGroupName: 'N/A'
-    backendAzureRmStorageAccountName: 'N/A'
-    backendAzureRmContainerName: 'N/A'
-    backendAzureRmKey: 'N/A'
+    commandOptions: ${{ parameters.commandOptions }}
+    backendAzureRmResourceGroupName: ${{ parameters.backendAzureRmResourceGroupName }}
+    backendAzureRmStorageAccountName: ${{ parameters.backendAzureRmStorageAccountName }}
+    backendAzureRmContainerName: ${{ parameters.backendAzureRmContainerName }}
+    backendAzureRmKey: ${{ parameters.backendAzureRmKey }}
     workingDirectory: ${{ parameters.terraformWorkingDirectory }}

@@ -10,6 +10,7 @@ steps:
 - task: TerraformTaskV4@4
   name: terraformApply
   displayName: 'Terraform Apply'
+  condition: eq(variables['terraformPlan.changesPresent'], 'true')
   inputs:
     provider: 'azurerm'
     command: 'apply'

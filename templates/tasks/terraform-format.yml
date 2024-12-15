@@ -1,0 +1,13 @@
+parameters:
+- name: terraformWorkingDirectory
+  type: string
+  default: ''
+- name: fmtOptions
+  type: string
+  default: '--check --diff'
+
+steps:
+- script: |
+    terraform fmt ${{ parameters.fmtOptions }}
+  displayName: 'Verify formatting'
+  workingDirectory: ${{ parameters.terraformWorkingDirectory }}
